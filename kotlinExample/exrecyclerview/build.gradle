@@ -43,13 +43,15 @@ buildscript {
          * for kotlin
          */
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        // 如果需要用到 Extensions 就注开
-//        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
 
         /**
          * for jfrog
          */
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+		
+		/**
+		 * Do not use 4+
+		 */
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.2.0"
     }
 }

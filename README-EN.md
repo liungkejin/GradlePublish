@@ -1,4 +1,4 @@
-# Public Kotlin / Java Library to MavenCentral/JCenter [English README](./README-EN.md)
+# Public Kotlin / Java Library to MavenCentral/JCenter
 
 本文针对的是使用 Android Studio & Gradle 来发布 Java/Kotlin Android 库到 MavenCentral/JCenter,
 对于 Java 库或者其他 IDE 没有实际检验过, 但是还是可以提供一个参考
