@@ -1,0 +1,62 @@
+apply plugin: 'com.android.library'
+
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:recyclerview-v7:23.2.1'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+
+buildscript {
+    ext.kotlin_version = '1.0.1-2'
+    ext.dokka_version = '0.9.7'
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        /**
+         * for kotlin
+         */
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        // 如果需要用到 Extensions 就注开
+//        classpath "org.jetbrains.kotlin:kotlin-android-extensions:$kotlin_version"
+
+        /**
+         * for jfrog
+         */
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+        classpath "org.jfrog.buildinfo:build-info-extractor-gradle:3.2.0"
+    }
+}
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+apply from: 'kotlin-bintray.gradle'

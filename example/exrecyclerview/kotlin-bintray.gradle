@@ -1,0 +1,137 @@
+group = PROJ_GROUP
+version = PROJ_VERSION
+project.archivesBaseName = PROJ_ARTIFACTID
+
+apply plugin: 'com.jfrog.bintray'
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'maven-publish'
+
+
+//"java -Djava.ext.dirs=. -jar dokka-fatjar.jar exrecyclerview/src/main/kotlin/ -format javadoc -output exrecyclerview/build/doc"
+task dokkaJavadoc(type: org.gradle.api.tasks.Exec) {
+    workingDir '.'
+    println "WorkingDir: $workingDir"
+    ext.toolJarPath = "$workingDir"
+    ext.dokkaJarPath = "$workingDir"+File.separator+"dokka-fatjar.jar"
+    ext.sourceDirs = "$workingDir"+File.separator+"src"+File.separator+"main"
+    ext.outputFormat = 'javadoc'
+    ext.outputDirectory = "$buildDir" + File.separator+ "javadoc"
+
+    /**
+     *
+     * 这里输出格式可以为: html , markdown, jekyll, javadoc
+     * 如果是 javadoc 格式, 他会用到 javadoc 的库,
+     * 如果你的 PATH 没有包含 JDK x.x.x/lib 路径的话, 就会报 'java.lang.ClassNotFoundException: com.sun.javadoc.DocErrorReporter' 异常
+     * 所以需要你主动将这个路径加进来, 或者将 JDK x.x.x/lib/tools.jar 文件拷贝出来, 下面这个命令我就是拷贝到了当前目录
+     *
+     * dokka-fatjar.jar 这个jar就是从 dokka 项目上下载下来的
+     */
+    commandLine "cmd" , "/c", "java -Djava.ext.dirs=$toolJarPath -jar $dokkaJarPath $sourceDirs -format $outputFormat -output $outputDirectory"
+
+    /**
+     * 如果你是 Linux 系统, 就用这个
+     */
+//    commandLine "java -Djava.ext.dirs=$toolJarPath -jar $dokkaJarPath $sourceDirs -format $outputFormat -output $outputDirectory"
+
+}
+
+task kotlinDocJar(type: Jar, dependsOn: dokkaJavadoc) {
+    classifier = 'javadoc'
+    from dokkaJavadoc.outputDirectory
+}
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from android.sourceSets.main.java.srcDirs
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "repo"
+        }
+    }
+    developers {
+        developer {
+            id DEVELOPER_ID
+            name DEVELOPER_NAME
+            email DEVELOPER_EMAIL
+        }
+    }
+}
+
+publishing {
+    publications {
+        mavenKotlin(MavenPublication) {
+            artifact kotlinDocJar
+
+            artifact sourceJar
+
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', PROJ_DESCRIPTION)
+                root.children().last() + pomConfig
+
+                def dependenciesNode = root.appendNode('dependencies')
+                configurations.compile.allDependencies.each {
+                    if (it.group && it.name && it.version) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+}
+
+afterEvaluate {
+    publishing.publications.mavenKotlin.artifact(bundleRelease)
+}
+
+bintray {
+    Properties properties = new Properties()
+    properties.load(project.rootProject.file('local.properties').newDataInputStream())
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    publications = ['mavenKotlin']
+    publish = true
+
+    pkg {
+        repo = 'maven'
+        name = PROJ_NAME
+        desc = PROJ_DESCRIPTION
+        websiteUrl = PROJ_WEBSITEURL
+        issueTrackerUrl = PROJ_ISSUETRACKERURL
+        vcsUrl = PROJ_VCSURL
+        licenses = ['Apache-2.0']
+        publicDownloadNumbers = true
+    }
+}
+
+
+artifactory {
+    contextUrl = 'http://oss.jfrog.org/artifactory'
+    resolve {
+        repository {
+            repoKey = 'libs-release'
+        }
+    }
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local' //The Artifactory repository key to publish to
+            username = bintray.user
+            password = bintray.key
+            maven = true
+        }
+        defaults {
+            //这里的名字和上面红色的名字一致即可，会将其包含的输出上传到jfrog上去
+            publications('mavenKotlin')
+            publishArtifacts = true
+        }
+    }
+}
