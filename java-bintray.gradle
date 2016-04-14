@@ -6,22 +6,37 @@ apply plugin: 'com.jfrog.bintray'
 apply plugin: "com.jfrog.artifactory"
 apply plugin: 'maven-publish'
 
+/**
+ * generate xxx-sources.jar
+ * 生成 xxx-sources.jar, 即将源代码打包
+ */
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
     classifier = 'sources'
 }
 
+/**
+ * generate javadoc
+ * 生成 javadoc 文档
+ */
 task javadoc(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += configurations.compile
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
 }
 
+/**
+ * generate xxx-javadoc.jar
+ * 将生成的 javadoc 打包为 xxx-javadoc.jar, 它依赖于 javadoc 任务
+ */
 task javadocJar(type: Jar, dependsOn: javadoc) {
     classifier = 'javadoc'
     from javadoc.destinationDir
 }
 
+/**
+ * javadoc 配置
+ */
 javadoc {
     options{
         encoding "UTF-8"

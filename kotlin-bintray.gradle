@@ -18,28 +18,39 @@ task dokkaJavadoc(type: org.gradle.api.tasks.Exec) {
     ext.outputDirectory = "$buildDir" + File.separator+ "javadoc"
 
     /**
-     *
      * 这里输出格式可以为: html , markdown, jekyll, javadoc
      * 如果是 javadoc 格式, 他会用到 javadoc 的库,
      * 如果你的 PATH 没有包含 JDK x.x.x/lib 路径的话, 就会报 'java.lang.ClassNotFoundException: com.sun.javadoc.DocErrorReporter' 异常
      * 所以需要你主动将这个路径加进来, 或者将 JDK x.x.x/lib/tools.jar 文件拷贝出来, 下面这个命令我就是拷贝到了当前目录
      *
      * dokka-fatjar.jar 这个jar就是从 dokka 项目上下载下来的
+     *
+     * the output format: html, markdown, jekyll, javadoc
+     * if you choose javadoc, you need include the tools.jar
      */
     commandLine "cmd" , "/c", "java -Djava.ext.dirs=$toolJarPath -jar $dokkaJarPath $sourceDirs -format $outputFormat -output $outputDirectory"
 
     /**
      * 如果你是 Linux 系统, 就用这个
+     * If your OS is Max/Linux, use this:
      */
 //    commandLine "java -Djava.ext.dirs=$toolJarPath -jar $dokkaJarPath $sourceDirs -format $outputFormat -output $outputDirectory"
 
 }
 
+/**
+ * generate xxx-javadoc.jar, depends on dokkaJavadoc task!
+ * 生成 xxx-javadoc.jar, 依赖于 dokkaJavadoc 任务, 所以dokkaJavadoc 生成完成后, 就会被打包
+ */
 task kotlinDocJar(type: Jar, dependsOn: dokkaJavadoc) {
     classifier = 'javadoc'
     from dokkaJavadoc.outputDirectory
 }
 
+/**
+ * generate xxx-sources.jar
+ * 打包源代码
+ */
 task sourceJar(type: Jar) {
     classifier "sources"
     from android.sourceSets.main.java.srcDirs
@@ -47,6 +58,8 @@ task sourceJar(type: Jar) {
 
 def pomConfig = {
     licenses {
+        // you can change to your license
+        // 换成你自己的许可证
         license {
             name "The Apache Software License, Version 2.0"
             url "http://www.apache.org/licenses/LICENSE-2.0.txt"
@@ -108,6 +121,8 @@ bintray {
         websiteUrl = PROJ_WEBSITEURL
         issueTrackerUrl = PROJ_ISSUETRACKERURL
         vcsUrl = PROJ_VCSURL
+        // Here the licenses, change to yours
+        // 这个许可证换可以成你自己的
         licenses = ['Apache-2.0']
         publicDownloadNumbers = true
     }
