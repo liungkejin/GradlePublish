@@ -45,7 +45,7 @@ bintray.apikey=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ```
 # 库的报名
-PROJ_GROUP=cn.kejin.android.views
+PROJ_GROUP=cn.kejin.ximageview
 # 库的ID
 PROJ_ARTIFACTID=XImageView
 # 库的版本
@@ -86,7 +86,7 @@ DEVELOPER_EMAIL=liungkejin@gmail.com
 然后等待审核通过, 你就可以在你项目里面使用
 
 ```groovy
-compile 'cn.kejin.android.views:XImageView:1.0.2'
+compile 'cn.kejin.ximageview:XImageView:1.0.2'
 ```
 
 来使用你的库了
@@ -146,7 +146,7 @@ bintray.apikey=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
 ```
 # 库的报名
-PROJ_GROUP=cn.kejin.android.views
+PROJ_GROUP=cn.kejin.exrecyclerview
 # 库的ID
 PROJ_ARTIFACTID=ExRecyclerView
 # 库的版本
@@ -179,5 +179,5 @@ DEVELOPER_EMAIL=liungkejin@gmail.com
 你需要登录到 Jfrog bintray 上, 然后将你的项目 Add to JCenter,  然后等待审核通过, 你就可以在你项目里面使用
 
 ```groovy
-compile 'cn.kejin.android.views:exrecyclerview:1.0.0'
+compile 'cn.kejin.exrecyclerview:exrecyclerview:1.0.0'
 ```
