@@ -4,6 +4,7 @@ project.archivesBaseName = PROJ_ARTIFACTID
 
 apply plugin: 'com.jfrog.bintray'
 apply plugin: "com.jfrog.artifactory"
+apply plugin: 'maven-publish'
 
 
 //"java -Djava.ext.dirs=. -jar dokka-fatjar.jar exrecyclerview/src/main/kotlin/ -format javadoc -output exrecyclerview/build/doc"
@@ -61,12 +62,6 @@ def pomConfig = {
     }
 }
 
-/**
- * 不要移动这个 apply 的位置, 否则有可能出现
- *'Error: Cannot configure the 'publishing' extension after it has been accessed'
- * (don't move this snippet code position)
- */
-apply plugin: 'maven-publish'
 publishing {
     publications {
         mavenKotlin(MavenPublication) {

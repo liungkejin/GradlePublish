@@ -1,4 +1,4 @@
-package cn.kejin.android.views
+package cn.kejin.exrecyclerview
 
 import android.content.Context
 import android.graphics.Canvas
@@ -10,6 +10,7 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
+import java.util.*
 
 import kotlin.collections.mutableListOf
 
@@ -27,11 +28,11 @@ class ExRecyclerView: RecyclerView {
      */
     private var xmlHeader = 0
 
-    protected val headerViews: MutableList<View> = mutableListOf()
+    protected val headerViews: ArrayList<View> = ArrayList()
 
     private var xmlFooter = 0
 
-    protected val footerViews: MutableList<View> = mutableListOf()
+    protected val footerViews: ArrayList<View> = ArrayList()
 
     protected val wrapper = AdapterWrapper()
 
@@ -307,7 +308,7 @@ class ExRecyclerView: RecyclerView {
      * 如果 view 是不可回收的, 则在从RecyclerView移除之后要主动将他从他的 parentView中移除掉
      * 不然会出现移除之后, 还粘在 RecyclerView 中的情况
      */
-    private fun removeFromParent(view:View) {
+    private fun removeFromParent(view: View) {
         val pView = view.parent
         if (pView != null && pView is ViewGroup) {
             pView.removeView(view)
@@ -399,7 +400,7 @@ class ExRecyclerView: RecyclerView {
             return super.onFailedToRecycleView(holder)
         }
 
-        inner class WrapperViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+        inner class WrapperViewHolder(itemView: View?) : ViewHolder(itemView) {
             init {
                 setIsRecyclable(false)
             }
@@ -464,6 +465,10 @@ class ExRecyclerView: RecyclerView {
         private set
 
     var loadMoreListener : OnLoadMoreListener? = null
+
+    fun setOnLoadMoreListener(listener: OnLoadMoreListener?) {
+        loadMoreListener = listener
+    }
 
     fun setOnLoadMoreListener(r : ()->Boolean) {
         loadMoreListener = object : OnLoadMoreListener {

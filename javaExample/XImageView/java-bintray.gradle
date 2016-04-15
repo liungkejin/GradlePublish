@@ -50,11 +50,6 @@ def pomConfig = {
     }
 }
 
-/**
- * 不要移动这个 apply 的位置, 否则有可能出现
- *'Error: Cannot configure the 'publishing' extension after it has been accessed'
- * (don't move this snippet code position)
- */
 apply plugin: 'maven-publish'
 publishing {
     publications {

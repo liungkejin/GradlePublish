@@ -1,4 +1,4 @@
-package cn.kejin.android.views
+package cn.kejin.exrecyclerview
 
 import android.graphics.Canvas
 import android.support.v7.widget.RecyclerView
@@ -32,7 +32,7 @@ interface ItemActionListener {
             isCurrentlyActive: Boolean):Boolean
 
     /**
-     * 当
+     * 当滑动或者拖动操作取消时, 进入 clearView
      * @return 返回 false 表示没有处理完毕, 需要调用 super.clearView()
      */
     fun clearView(
