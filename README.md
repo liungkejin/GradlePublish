@@ -50,7 +50,7 @@ PROJ_GROUP=cn.kejin.ximageview
 # 库的ID
 PROJ_ARTIFACTID=XImageView
 # 库的版本
-PROJ_VERSION=1.0.2
+PROJ_VERSION=1.0.0
 ### 最后 gradle引用的形式就是 $PROJ_GROUP:$PROJ_ARTIFACTID:$PROJ_VERSION
 
 # 库名
@@ -85,7 +85,7 @@ DEVELOPER_EMAIL=liungkejin@gmail.com
 然后等待审核通过, 你就可以在你项目里面像这样
 
 ```groovy
-compile 'cn.kejin.ximageview:XImageView:1.0.2'
+compile 'cn.kejin.ximageview:XImageView:1.0.0'
 ```
 
 来使用你的库了

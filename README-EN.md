@@ -51,7 +51,7 @@ PROJ_GROUP=cn.kejin.ximageview
 
 PROJ_ARTIFACTID=XImageView
 
-PROJ_VERSION=1.0.2
+PROJ_VERSION=1.0.0
 ### The last gradle ref format is $PROJ_GROUP:$PROJ_ARTIFACTID:$PROJ_VERSION
 
 PROJ_NAME=XImageView
@@ -87,7 +87,7 @@ send a request to JCenter!
 Then after the library be approved by JCenter, you can use your library like this:
 
 ```groovy
-compile 'cn.kejin.ximageview:XImageView:1.0.2'
+compile 'cn.kejin.ximageview:XImageView:1.0.0'
 ```
 
 ## Kotlin Library
